@@ -66,6 +66,7 @@ $node = "E:\dsh\resources\runtime\primary-runtime\dependencies\node\bin\node.exe
 13. `viewBox`、JS 常量 `H`、CSS `aspect-ratio` 三者必须同数（150 vs 170 会裁掉横轴刻度）。
 14. mp4 抽帧：`memgrab.cs`（RGB32 开 VIDEO_PROCESSING、`IMFSample` 30 槽）。
 15. **本机有网**：命令行出网被拒不等于断网；别用桩页评价渲染。
+16. 推送：直连 github 常被 RST（DNS→20.6.7.17）；临时把 Clash GLOBAL 切到「🎓学术网站」，`git -c http.proxy=http://127.0.0.1:7890 push`，完后还原节点。
 16. 权限提升起的无头 Chrome，`Stop-Process` 打不掉：用 `cdp_close2.js` 发 `Browser.close` 再删 `--user-data-dir`。
 17. 摘要条 `max-height:56px` 只管内容区（实际≈67px）；收起时 `table/.note/.pt/.lg/svg` 全 `display:none`；箭头用 `▼` 不用 `▾`（缺字形）。
 18. 安全区需 `viewport-fit=cover`；CDP 用 `Emulation.setSafeAreaInsetsOverride`；Chrome 不画灵动岛，截图自己贴（`draw_island.py`）。
