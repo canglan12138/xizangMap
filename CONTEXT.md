@@ -8,7 +8,7 @@
 - **预算**：油 1,550＋住 1,350＋吃 2,800＋门票 600＋保养 1,100＋装备 2,000＋露营 2,500＋保险 500＋杂 100＋备用 2,500。
 - **另有**：★备选B 西线（G109，≈4,235 km / 14 天）、返程四方案；政策须带来源，2027 行前按复核节点重查。
 - **上次更新**：2026-11-17（地图六项 + 起终点可点气泡，CDP 真机验过）。
-- **仓库**：`github.com/canglan12138/xizangMap`（私有，`main`）；本机必须 `git config http.proxy ""` 直连，残留的 `127.0.0.1:7890` 代理会让 git 连 GitHub 超时（curl 直连正常）。
+- **仓库**：`github.com/canglan12138/xizangMap`（私有）；本机必须 `git config http.proxy ""` 直连，残留的 `127.0.0.1:7890` 代理会让 git 连 GitHub 超时（curl 直连正常）。
 
 ## 怎么跑
 
@@ -45,7 +45,7 @@ $node = "E:\dsh\resources\runtime\primary-runtime\dependencies\node\bin\node.exe
 | 11-17 | 每站「当地必尝」：xlsx 第 12 表 33 行（不列店名）＋信息卡一行 |
 | 11-17 | 信息卡 KPI：里程/海拔大数字（绿/橙/红，休整显示「休整」）、必尝高亮条；删「行程」行、累计 `x / 5257`；note 去重 15 句（标签 `userCollapsed`、viewBox 170） |
 | 11-17 | 表格去重两轮：删露营点 11 行（改提示带）+ 重复高速行 + 边防证行；保险 3→2；散装油指向政策②；**行程模板删「要点」列**；总览每日节奏改指针；预算 1.50/1.05 |
-| 11-17 | 灵动岛：`env(safe-area-inset-*)` 铺到标题/卡片/底坞/Leaflet；手机藏 `+/−`；横屏 `max-height:520px` 紧凑规则 |
+| 11-17 | 灵动岛：`env(safe-area-inset-*)` 铺标题/卡片/底坞/Leaflet；手机藏 `+/−`；横屏 `max-height:520px` 紧凑 |
 | 11-17 | 地图：导航深链（`uri.amap.com/navigation`+`policy=3`）、`moto2027.cur/done` 记忆、`#d=NN`、搜索（部分匹配）、垭口/加油站清单、强光（`moto2027.day`，对比度≥4.5）、已走灰段（可取消/清空）、起终点气泡（可点/贴边内收/<7 级隐地名）；离线 SW 不做 |
 
 ## 坑与雷区
@@ -73,7 +73,7 @@ $node = "E:\dsh\resources\runtime\primary-runtime\dependencies\node\bin\node.exe
 ## 进度
 
 - **已完成**：P0 五项＋P1 九项＋剖面图/卡片坞/全览定位/逐日复核＋33 天里程重排＋标签收起与 viewBox 修复＋CDP 真机验证＋灵动岛与横屏适配＋沿途美食（表+地图）＋地图六项。
-- **回归测试**：`tools/test_page.js`（CDP 49 项）+ `tools/test_files.py`（19 项），当前 **49/49 + 19/19 全过**。
+- **回归测试**：`tools/test_page.js`（CDP 49 项）+ `tools/test_files.py`（19 项），49/49 + 19/19 全过。
 - **待办（P2 可选）**：备选B 独立地图 / 装备型号与已购列 / 瓦片离线化 / 每日预算分档 / 摄影点 / 时间表精确到小时。
 - 拉萨市区限摩：未见官方通告；西藏全境高速禁摩已写入「高速可选」表。
 
