@@ -1,0 +1,13 @@
+tmp/
+acl-report/
+*.bak
+*.bak.*
+map_before*.html
+.dsh-office-*/
+cprof*/
+r-*/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
