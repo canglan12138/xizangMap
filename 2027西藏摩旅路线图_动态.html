@@ -148,6 +148,11 @@
   .acts a,.acts button{flex:1;text-align:center;text-decoration:none;font-size:12px;padding:7px 6px;
         border-radius:8px;border:1px solid #475569;background:#334155;color:#eef2f7;cursor:pointer}
   .acts .primary{background:#fbbf24;color:#1c2430;border-color:#fbbf24;font-weight:bold}
+  #toast{position:fixed;left:50%;bottom:calc(50% + 20px);transform:translateX(-50%) translateY(10px);
+         max-width:min(86vw,420px);padding:10px 14px;border-radius:10px;background:rgba(15,23,42,.95);
+         color:#e2e8f0;font-size:13px;line-height:1.5;border:1px solid #334155;box-shadow:0 8px 28px rgba(0,0,0,.5);
+         opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:2000}
+  #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
   #info .acts #btnDone.on{background:#22c55e;color:#052e16;border-color:#16a34a;font-weight:bold}
   /* ── 搜索框 ── */
   #qBtn{margin-left:auto;background:#334155;color:#eef2f7;border:1px solid #475569;border-radius:8px;
@@ -689,7 +694,16 @@ document.getElementById("chkProf").onchange=updateProfile;
 document.getElementById("chkFuel").onchange=drawFuel;
 document.getElementById("chkHw").onchange=drawHw;
 document.getElementById("chkDay").onchange=applyDaylight;
+function toast(msg, ms){
+  var t = document.getElementById("toast");
+  if(!t){ t = document.createElement("div"); t.id = "toast"; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add("on");
+  clearTimeout(t._tm); t._tm = setTimeout(function(){ t.classList.remove("on"); }, ms || 3600);
+}
 document.getElementById("iNav").addEventListener("click", function(){
+  if(/^(amapuri|iosamap|androidamap):/.test(this.getAttribute("href")||"")){
+    toast("已调起高德「路线规划」：点右下角『摩托』开始摩托导航（高德链接不支持直接指定摩托模式）", 4200);
+  }
   var web = this.dataset.web, href = this.getAttribute("href")||"";
   if(!web || !/^(amapuri|iosamap|androidamap):/.test(href)) return;
   setTimeout(function(){
