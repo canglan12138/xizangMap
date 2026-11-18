@@ -47,7 +47,7 @@ $node = "E:\dsh\resources\runtime\primary-runtime\dependencies\node\bin\node.exe
 | 11-17 | 表格去重两轮：删露营点 11 行（改提示带）+ 重复高速行 + 边防证行；保险 3→2；散装油指向政策②；**行程模板删「要点」列**；总览每日节奏改指针；预算 1.50/1.05 |
 | 11-17 | 灵动岛：`env(safe-area-inset-*)` 铺标题/卡片/底坞/Leaflet；手机藏 `+/−`；横屏 `max-height:520px` 紧凑 |
 | 11-18 | 手机导航直呼高德 `amapuri://route/plan/`，未装 1.4s 回落 `uri.amap.com`；高德协议无摩托模式（README 说明） |
-| 11-17 | 地图：导航深链（`uri.amap.com/navigation`+`policy=3`）、`cur/done` 记忆、`#d=NN`、搜索（部分匹配）、垭口/加油站清单、强光（对比度≥4.5）、已走灰段（可撤销）、起终点气泡（可点/内收/<7 级隐地名）；离线 SW 不做 |
+| 11-17 | 地图六项：导航深链（`uri.amap.com/navigation`+`policy=3`）、`cur/done` 记忆、`#d=NN` 深链、搜索（部分匹配）、垭口+加油站清单、强光（`day` 记忆、对比度 ≥4.5）、已走灰段（可取消/清空）、起终点气泡；离线 SW 不做（`file://` 不支持） |
 
 ## 坑与雷区
 
@@ -64,8 +64,8 @@ $node = "E:\dsh\resources\runtime\primary-runtime\dependencies\node\bin\node.exe
 11. 卡片坞 `position:fixed`：`#map` 的 `inset` 让出 `--ctlH` 再 `invalidateSize()`，加 padding 不够。
 12. 点当前标签收起别靠兜底 `show('info')`（会立刻弹回），要显式状态位。
 13. `viewBox`、JS 常量 `H`、CSS `aspect-ratio` 三者必须同数（150 vs 170 会裁掉横轴刻度）。
-14. mp4 抽帧：`memgrab.cs`，RGB32 需开 VIDEO_PROCESSING，`IMFSample` 声明 30 槽。
-15. **本机有网**：沙箱命令行出网被拒不代表断网，Chrome 能加载 CDN/瓦片；别用桩页评价渲染。
+14. mp4 抽帧：`memgrab.cs`（RGB32 开 VIDEO_PROCESSING、`IMFSample` 30 槽）。
+15. **本机有网**：命令行出网被拒不等于断网；别用桩页评价渲染。
 16. 权限提升起的无头 Chrome，`Stop-Process` 打不掉：用 `cdp_close2.js` 发 `Browser.close` 再删 `--user-data-dir`。
 17. 摘要条 `max-height:56px` 只管内容区（实际≈67px）；收起时 `table/.note/.pt/.lg/svg` 全 `display:none`；箭头用 `▼` 不用 `▾`（缺字形）。
 18. 安全区需 `viewport-fit=cover`；CDP 用 `Emulation.setSafeAreaInsetsOverride`；Chrome 不画灵动岛，截图自己贴（`draw_island.py`）。
@@ -73,8 +73,7 @@ $node = "E:\dsh\resources\runtime\primary-runtime\dependencies\node\bin\node.exe
 
 ## 进度
 
-- **已完成**：P0 五项＋P1 九项＋剖面图/卡片坞/全览定位/逐日复核＋33 天里程重排＋标签收起与 viewBox 修复＋CDP 真机验证＋灵动岛与横屏适配＋沿途美食（表+地图）＋地图六项。
-- **回归测试**：`tools/test_page.js`（CDP 49 项）+ `tools/test_files.py`（19 项），49/49 + 19/19 全过。
+- **已完成**：P0/P1 全项＋剖面图/卡片坞/全览/灵动岛/横屏＋33 天重排＋沿途美食＋地图六项；CDP 49 项 + 文件 19 项全过。
 - **待办（P2 可选）**：备选B 独立地图 / 装备型号与已购列 / 瓦片离线化 / 每日预算分档 / 摄影点 / 时间表精确到小时。
 - 拉萨市区限摩：未见官方通告；西藏全境高速禁摩已写入「高速可选」表。
 
@@ -84,6 +83,7 @@ $node = "E:\dsh\resources\runtime\primary-runtime\dependencies\node\bin\node.exe
 
 ## 会话日志（倒序）
 
+- **2026-11-18 回归**：6 视口 × 16 步流程全过；修 6 处——摘要条露按钮、触摸目标 40px、横屏卡高、`minZoom`→3、复选框 18px、QA 重叠判定。
 - **2026-11-17** 信息卡重排（KPI＋必尝条＋空行隐藏＋note 去重）；表格去重两轮（行程模板 53×5）；地图六项＋CDP 全验；「记为到达」可取消（含清空）。
 
 - **11-17** 美食（第 12 表＋地图必尝行）；纠正「断网」误判（本机有网，真页 12/12、24/24 瓦片）；修摘要条与 `▼` 字形。
