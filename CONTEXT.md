@@ -27,7 +27,7 @@ $node = "E:\dsh\resources\runtime\primary-runtime\dependencies\node\bin\node.exe
 | 路径 | 作用 |
 |---|---|
 | `…计划_乌拉盖出发.xlsx` | 12 表：总览/出行月份/路线与路况/注意事项/装备清单/预算估算/行程模板/核查清单/高速可选/返程决策/住宿与营地/沿途美食 |
-| `…路线图_动态.html` | **唯一源文件**（1.50 MB）：33 天 / 59 加油点 / 7 垭口 / 高速可选层 / 住宿海拔柱状图；信息卡含「当地必尝」＋导航按钮；🔍 搜索、清单、强光模式、已走灰段 |
+| `…路线图_动态.html` | **唯一源文件**（1.52 MB）：33 天 / 59 加油点 / 7 垭口 / 高速层 / 海拔柱状图；信息卡含必尝＋导航；搜索、清单、强光、已走灰段 |
 | `…轨迹_全程.gpx` / `_按日.gpx` | 可导入手机；休整日无 trk |
 | `build_moto_plan_v3.py` | 表格唯一生成器（≈750 行） |
 | `tmp/tools/` | `gpx_only.js`、`cdp_*.js`、`draw_island.py`、`syntax_check.js`、`memgrab.cs` |
@@ -46,7 +46,8 @@ $node = "E:\dsh\resources\runtime\primary-runtime\dependencies\node\bin\node.exe
 | 11-17 | 信息卡 KPI：里程/海拔大数字（绿/橙/红，休整显示「休整」）、必尝高亮条；删「行程」行、累计 `x / 5257`；note 去重 15 句（标签 `userCollapsed`、viewBox 170） |
 | 11-17 | 表格去重两轮：删露营点 11 行（改提示带）+ 重复高速行 + 边防证行；保险 3→2；散装油指向政策②；**行程模板删「要点」列**；总览每日节奏改指针；预算 1.50/1.05 |
 | 11-17 | 灵动岛：`env(safe-area-inset-*)` 铺标题/卡片/底坞/Leaflet；手机藏 `+/−`；横屏 `max-height:520px` 紧凑 |
-| 11-17 | 地图：导航深链（`uri.amap.com/navigation`+`policy=3`）、`moto2027.cur/done` 记忆、`#d=NN`、搜索（部分匹配）、垭口/加油站清单、强光（`moto2027.day`，对比度≥4.5）、已走灰段（可取消/清空）、起终点气泡（可点/贴边内收/<7 级隐地名）；离线 SW 不做 |
+| 11-18 | 手机导航直呼高德 `amapuri://route/plan/`，未装 1.4s 回落 `uri.amap.com`；高德协议无摩托模式（README 说明） |
+| 11-17 | 地图：导航深链（`uri.amap.com/navigation`+`policy=3`）、`cur/done` 记忆、`#d=NN`、搜索（部分匹配）、垭口/加油站清单、强光（对比度≥4.5）、已走灰段（可撤销）、起终点气泡（可点/内收/<7 级隐地名）；离线 SW 不做 |
 
 ## 坑与雷区
 
@@ -63,8 +64,8 @@ $node = "E:\dsh\resources\runtime\primary-runtime\dependencies\node\bin\node.exe
 11. 卡片坞 `position:fixed`：`#map` 的 `inset` 让出 `--ctlH` 再 `invalidateSize()`，加 padding 不够。
 12. 点当前标签收起别靠兜底 `show('info')`（会立刻弹回），要显式状态位。
 13. `viewBox`、JS 常量 `H`、CSS `aspect-ratio` 三者必须同数（150 vs 170 会裁掉横轴刻度）。
-14. mp4 抽帧看 `memgrab.cs`：内存流→SourceReader，RGB32 开 VIDEO_PROCESSING，`IMFSample` 声明 30 个属性槽。
-15. **本机有网**：沙箱 `Invoke-WebRequest` 出网被拒，Chrome 能加载 CDN 与瓦片；别用命令行网络失败推断断网，别用桩页评价渲染。
+14. mp4 抽帧：`memgrab.cs`，RGB32 需开 VIDEO_PROCESSING，`IMFSample` 声明 30 槽。
+15. **本机有网**：沙箱命令行出网被拒不代表断网，Chrome 能加载 CDN/瓦片；别用桩页评价渲染。
 16. 权限提升起的无头 Chrome，`Stop-Process` 打不掉：用 `cdp_close2.js` 发 `Browser.close` 再删 `--user-data-dir`。
 17. 摘要条 `max-height:56px` 只管内容区（实际≈67px）；收起时 `table/.note/.pt/.lg/svg` 全 `display:none`；箭头用 `▼` 不用 `▾`（缺字形）。
 18. 安全区需 `viewport-fit=cover`；CDP 用 `Emulation.setSafeAreaInsetsOverride`；Chrome 不画灵动岛，截图自己贴（`draw_island.py`）。

@@ -496,7 +496,17 @@ function updateInfo(){
   document.getElementById("iCum").textContent = day.cum + " / " + TOTAL + " km" +
     (doneDays>0 ? "（已走 " + doneDays + " 天）" : "");
   var navEl = document.getElementById("iNav"), navU = navUrl(current);
-  if(navU){ navEl.href = navU; navEl.textContent = "🧭 导航到 D" + day.d + " 终点"; navEl.style.opacity="1"; }
+  if(navU){
+    navEl.href = navU;
+    navEl.dataset.web = webNavUrl(current) || "";
+    var scheme = /^(amapuri|iosamap|androidamap):/.test(navU);
+    navEl.target = scheme ? "_self" : "_blank";
+    navEl.title = scheme
+      ? "打开高德地图「路线规划」；高德链接不提供摩托车模式，进 App 后选『摩托』（需先在 高德-设置-导航设置 里开启摩托导航）"
+      : "网页版高德路线规划（桌面浏览器）";
+    navEl.textContent = "🧭 导航到 D" + day.d + " 终点";
+    navEl.style.opacity="1";
+  }
   else { navEl.removeAttribute("href"); navEl.textContent = "🧭 无坐标"; navEl.style.opacity=".5"; }
   document.getElementById("iTime").textContent = day.km>0 ? "约 " + Math.round(day.km/50*10)/10 + " h（按 50km/h 估）" : "—";
   document.getElementById("iNote").textContent = day.note;
@@ -591,12 +601,28 @@ function dayEndPos(i){
   for(let j=i-1;j>=0;j--){const e=DAYS[j];if(e&&e.pts&&e.pts.length){const p=e.pts[e.pts.length-1];return [p[1],p[0]];}}
   return null;
 }
-function navUrl(i){
+function isIOS(){ return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==="MacIntel" && (navigator.maxTouchPoints||0)>1); }
+function isAndroid(){ return /Android/i.test(navigator.userAgent); }
+function navTarget(i){
   const pos=dayEndPos(i); if(!pos) return null;
   const d=DAYS[i];
   const nm=encodeURIComponent(d.rest?d.from:(d.to||d.from||"终点"));
-  return "https://uri.amap.com/navigation?to="+pos[1].toFixed(5)+","+pos[0].toFixed(5)+","+nm+
+  return {pos:pos, name:nm, day:d};
+}
+/* 网页版（桌面/兜底）：高德 URI API 只支持 驾车/公交/步行/骑行，没有“摩托车”这一项 */
+function webNavUrl(i){
+  const t=navTarget(i); if(!t) return null;
+  return "https://uri.amap.com/navigation?to="+t.pos[1].toFixed(5)+","+t.pos[0].toFixed(5)+","+t.name+
          "&mode=car&policy=3&src=moto2027&coordinate=gaode&callnative=1";
+}
+/* 手机端：直接用高德 App scheme 唤起「路线规划」页，省掉网页落地页那一次手动点击 */
+function navUrl(i){
+  const t=navTarget(i); if(!t) return null;
+  if(isIOS()||isAndroid()){
+    return "amapuri://route/plan/?sourceApplication=moto2027&dlat="+t.pos[1].toFixed(6)+
+           "&dlon="+t.pos[0].toFixed(6)+"&dname="+t.name+"&dev=0&t=0";
+  }
+  return webNavUrl(i);
 }
 function setDone(n){
   doneDays=Math.max(0,Math.min(DAYS.length,n));
@@ -663,6 +689,13 @@ document.getElementById("chkProf").onchange=updateProfile;
 document.getElementById("chkFuel").onchange=drawFuel;
 document.getElementById("chkHw").onchange=drawHw;
 document.getElementById("chkDay").onchange=applyDaylight;
+document.getElementById("iNav").addEventListener("click", function(){
+  var web = this.dataset.web, href = this.getAttribute("href")||"";
+  if(!web || !/^(amapuri|iosamap|androidamap):/.test(href)) return;
+  setTimeout(function(){
+    if(document.visibilityState === "visible"){ location.href = web; }
+  }, 1400);
+});
 document.getElementById("btnDone").onclick=()=>{
   // 当前天已记为到达 → 再点一次取消（还原到标记前的进度）；否则记为到达
   if(doneDays>current){ setDone(doneUndo===null ? current : doneUndo); doneUndo=null; }
